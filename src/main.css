@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SF-Pro-Display-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF UI Text";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/fonts/SFUIText-Regular.woff") format("woff");
+}
