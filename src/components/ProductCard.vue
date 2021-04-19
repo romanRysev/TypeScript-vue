@@ -5,11 +5,25 @@
       <img class="card__image" :src="card.image.url" alt="фото товара" />
       <p class="card__code">{{ card.code }}</p>
       <p class="card__name">{{ card.name }}</p>
-      <div class="card__price">
-        <p class="card__old-price" v-if="card.price.old_price">
-          {{ card.price.old_price }}&#8381;
-        </p>
-        <p class="card__current-price">{{ card.price.current_price }}&#8381;</p>
+      <div class="card__footer">
+        <div class="card__price">
+          <p class="card__old-price" v-if="card.price.old_price">
+            {{ card.price.old_price }}&#8381;
+          </p>
+          <p class="card__current-price">
+            {{ card.price.current_price }}&#8381;
+          </p>
+        </div>
+        <div class="card__icon-container">
+          <img
+            v-if="inShopping"
+            src="/pic/shopping_active.svg"
+            alt="shoppingAdded"
+          />
+          <img v-else src="/pic/shopping.svg" alt="ToShopping" />
+          <img v-if="liked" src="/pic/like_active.svg" alt="Liked" />
+          <img src="/pic/like.svg" alt="Like" />
+        </div>
       </div>
     </div>
   </div>
@@ -20,7 +34,11 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "ProductCard",
-  props: { card: { type: Object } },
+  props: {
+    card: { type: Object },
+    liked: { type: Boolean, default: false },
+    inShopping: { type: Boolean, default: false },
+  },
 });
 </script>
 
@@ -33,6 +51,9 @@ export default Vue.extend({
   position: relative;
   box-sizing: border-box;
   margin: 20px 24px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card__label {
@@ -53,6 +74,7 @@ export default Vue.extend({
 .card__image {
   width: 238px;
   height: 237px;
+  align-self: center;
 }
 
 .card__code {
@@ -63,6 +85,7 @@ export default Vue.extend({
   line-height: 140%;
   letter-spacing: 0.02em;
   color: #888888;
+  margin: 23px 0 6px;
 }
 
 .card__name {
@@ -72,8 +95,13 @@ export default Vue.extend({
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.02em;
+  margin: 0 0 9px;
 }
 
+.card__footer {
+  display: flex;
+  justify-content: space-between;
+}
 .card__price {
   display: flex;
 }
@@ -86,6 +114,7 @@ export default Vue.extend({
   letter-spacing: 0.02em;
   text-decoration-line: line-through;
   color: #888888;
+  margin: 0;
 }
 .card__current-price {
   font-family: "SF UI Text", sans-serif;
@@ -94,5 +123,11 @@ export default Vue.extend({
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.02em;
+  margin: 0;
+}
+.card__icon-container {
+  width: 66px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
