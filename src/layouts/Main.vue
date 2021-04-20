@@ -29,7 +29,13 @@
       </div>
     </header>
     <main class="main__content-container">
-      <ProductCard v-for="(card, i) in cardsList" :key="i" :card="card" />
+      <ProductCard
+        v-for="(card, i) in cardsList"
+        :key="i"
+        :card="card"
+        :inShopping="card.inShopping"
+        :liked="card.liked"
+      />
     </main>
   </div>
 </template>
@@ -38,7 +44,6 @@
 import Vue from "vue";
 import ProductCard from "../components/ProductCard.vue";
 import materials from "../data/materials.json";
-import cards from "../data/items.json";
 
 interface MainData {
   cards: Record<string, unknown>[];
@@ -52,9 +57,14 @@ export default Vue.extend({
   components: {
     ProductCard,
   },
+  created() {
+    this.$store.dispatch("fetchCards");
+    this.$store.dispatch("fetchLocal");
+    this.cards = this.$store.getters.getCards;
+  },
   data(): MainData {
     return {
-      cards: cards,
+      cards: [],
       materials: materials,
       selectedMaterial: -1,
       sortBy: "",
@@ -63,13 +73,12 @@ export default Vue.extend({
   computed: {
     cardsList(): Record<string, any>[] {
       let list: Record<string, any>[] = [];
-
       if (this.selectedMaterial !== -1) {
         list = this.cards.filter((item) => {
           if (item.material == this.selectedMaterial) return item;
         });
       } else {
-        list = this.cards;
+        list = this.cards.slice();
       }
 
       list.sort((a, b) => {
@@ -77,6 +86,29 @@ export default Vue.extend({
           return a.price.current_price - b.price.current_price;
         } else {
           return b.price.current_price - a.price.current_price;
+        }
+      });
+
+      list.forEach((item) => {
+        if (
+          this.$store.getters.getCart.find(
+            (elem: { id: number | string }) => item.id == elem.id
+          )
+          //this.$store.getters.getCart.includes(item, 0)
+        ) {
+          item.inShopping = true;
+        } else {
+          item.inShopping = false;
+        }
+
+        if (
+          this.$store.getters.getLiked.find(
+            (elem: { id: number | string }) => item.id == elem.id
+          )
+        ) {
+          item.liked = true;
+        } else {
+          item.liked = false;
         }
       });
 

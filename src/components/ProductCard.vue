@@ -16,13 +16,33 @@
         </div>
         <div class="card__icon-container">
           <img
+            class="icon"
             v-if="inShopping"
             src="/pic/shopping_active.svg"
             alt="shoppingAdded"
+            @click="deleteFromCart"
           />
-          <img v-else src="/pic/shopping.svg" alt="ToShopping" />
-          <img v-if="liked" src="/pic/like_active.svg" alt="Liked" />
-          <img src="/pic/like.svg" alt="Like" />
+          <img
+            class="icon"
+            v-else
+            src="/pic/shopping.svg"
+            alt="ToShopping"
+            @click="toShopping"
+          />
+          <img
+            class="icon"
+            v-if="liked"
+            src="/pic/like_active.svg"
+            alt="Liked"
+            @click="dislike"
+          />
+          <img
+            v-else
+            class="icon"
+            src="/pic/like.svg"
+            alt="Like"
+            @click="toLiked"
+          />
         </div>
       </div>
     </div>
@@ -38,6 +58,20 @@ export default Vue.extend({
     card: { type: Object },
     liked: { type: Boolean, default: false },
     inShopping: { type: Boolean, default: false },
+  },
+  methods: {
+    toShopping() {
+      this.$store.dispatch("addToLocalCart", this.card);
+    },
+    toLiked() {
+      this.$store.dispatch("addToLiked", this.card);
+    },
+    dislike() {
+      this.$store.dispatch("dislike", this.card);
+    },
+    deleteFromCart() {
+      this.$store.dispatch("deleteFromCart", this.card);
+    },
   },
 });
 </script>
@@ -129,5 +163,8 @@ export default Vue.extend({
   width: 66px;
   display: flex;
   justify-content: space-between;
+}
+.icon {
+  cursor: pointer;
 }
 </style>
