@@ -2,7 +2,7 @@
   <div>
     <div class="card">
       <p class="card__label" v-if="card.price.old_price">Скидка</p>
-      <img class="card__image" :src="card.image.url" alt="фото товара" />
+      <img class="card__image" :src="`.${card.image.url}`" alt="фото товара" />
       <p class="card__code">{{ card.code }}</p>
       <p class="card__name">{{ card.name }}</p>
       <div class="card__footer">
@@ -18,28 +18,28 @@
           <img
             class="icon"
             v-if="inShopping"
-            src="/pic/shopping_active.svg"
+            src="../../public/pic/shopping_active.svg"
             alt="shoppingAdded"
             @click="deleteFromCart"
           />
           <img
             class="icon"
             v-else
-            src="/pic/shopping.svg"
+            src="../../public/pic/shopping.svg"
             alt="ToShopping"
             @click="toShopping"
           />
           <img
             class="icon"
             v-if="liked"
-            src="/pic/like_active.svg"
+            src="../../public/pic/like_active.svg"
             alt="Liked"
             @click="dislike"
           />
           <img
             v-else
             class="icon"
-            src="/pic/like.svg"
+            src="../../public/pic/like.svg"
             alt="Like"
             @click="toLiked"
           />
@@ -78,8 +78,9 @@ export default Vue.extend({
 
 <style scoped>
 .card {
+  font-family: "SF UI Text Medium", sans-serif;
   width: 336px;
-  height: 352px;
+  min-height: 352px;
   border: solid 1px #eee;
   padding: 9px 22px 9px 12px;
   position: relative;
@@ -112,7 +113,6 @@ export default Vue.extend({
 }
 
 .card__code {
-  font-family: "SF UI Text", sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 10px;
@@ -123,13 +123,13 @@ export default Vue.extend({
 }
 
 .card__name {
-  font-family: "SF UI Text", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.02em;
   margin: 0 0 9px;
+  word-break: break-all;
 }
 
 .card__footer {
@@ -138,25 +138,18 @@ export default Vue.extend({
 }
 .card__price {
   display: flex;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.02em;
 }
 .card__old-price {
-  font-family: "SF UI Text", sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 140%;
-  letter-spacing: 0.02em;
   text-decoration-line: line-through;
   color: #888888;
-  margin: 0;
+  margin: 0 9px 0 0;
 }
 .card__current-price {
-  font-family: "SF UI Text", sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 140%;
-  letter-spacing: 0.02em;
   margin: 0;
 }
 .card__icon-container {

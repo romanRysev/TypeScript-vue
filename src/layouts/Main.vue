@@ -1,19 +1,27 @@
 <template>
   <div class="main">
     <header class="header">
-      <p>Главная / Системы хранения / Комплекты стеллажных систем</p>
+      <div class="breadcrumbs">
+        <a
+          class="breadcrumbs__item"
+          v-for="(crumb, id) in breadcrumbs"
+          :href="crumb.url"
+          :key="id"
+          >{{ crumb.text }}</a
+        >
+      </div>
       <h1 class="main__title">Комплекты стеллажных систем</h1>
       <div class="selects">
         <label class="select-label"
-          >Сортировать по:
+          ><span class="select-label__text">Сортировать по:</span>
           <select class="select" v-model="sortBy">
             <option value="">Не важно</option>
             <option value="asc">Возрастанию цены</option>
             <option value="desc">Убыванию цены</option>
-          </select></label
-        >
+          </select>
+        </label>
         <label class="select-label"
-          >Материал
+          ><span class="select-label__text">Материал</span>
           <select class="select" v-model="selectedMaterial">
             <option :value="-1">Не важно</option>
             <option
@@ -24,8 +32,8 @@
             >
               {{ material.name }}
             </option>
-          </select></label
-        >
+          </select>
+        </label>
       </div>
     </header>
     <main class="main__content-container">
@@ -50,6 +58,7 @@ interface MainData {
   materials: Record<string, unknown>[];
   selectedMaterial: number;
   sortBy: string;
+  breadcrumbs: Record<string, unknown>[];
 }
 
 export default Vue.extend({
@@ -68,11 +77,16 @@ export default Vue.extend({
       materials: materials,
       selectedMaterial: -1,
       sortBy: "",
+      breadcrumbs: [
+        { url: "#", text: "Главная" },
+        { url: "#", text: "Системы хранения" },
+        { url: "#", text: "Комплекты стеллажных систем" },
+      ],
     };
   },
   computed: {
-    cardsList(): Record<string, any>[] {
-      let list: Record<string, any>[] = [];
+    cardsList(): any[] {
+      let list: any[] = [];
       if (this.selectedMaterial !== -1) {
         list = this.cards.filter((item) => {
           if (item.material == this.selectedMaterial) return item;
@@ -94,7 +108,6 @@ export default Vue.extend({
           this.$store.getters.getCart.find(
             (elem: { id: number | string }) => item.id == elem.id
           )
-          //this.$store.getters.getCart.includes(item, 0)
         ) {
           item.inShopping = true;
         } else {
@@ -125,7 +138,28 @@ export default Vue.extend({
   margin: auto;
 }
 .header {
-  padding-left: 50px;
+  padding-left: 24px;
+  box-sizing: border-box;
+}
+.breadcrumbs {
+  margin-top: 32px;
+  font-family: "SF UI Text", sans-serif;
+  font-size: 16px;
+  line-height: 16px;
+}
+.breadcrumbs__item {
+  color: black;
+  text-decoration: none;
+}
+.breadcrumbs__item:not(:last-child) {
+  color: #828282;
+}
+.breadcrumbs__item:not(:last-child)::after {
+  content: " / ";
+  width: 30px;
+  display: inline-block;
+  text-align: center;
+  cursor: auto;
 }
 .main__content-container {
   display: flex;
@@ -139,6 +173,8 @@ export default Vue.extend({
 }
 .selects {
   display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 21px;
 }
 .select {
   height: 40px;
@@ -148,8 +184,14 @@ export default Vue.extend({
   letter-spacing: 0.03em;
   padding-left: 16px;
   padding-right: 19px;
-  margin-right: 24px;
   line-height: 150%;
+  background-image: url("../../public/pic/arrow.svg");
+  background-repeat: no-repeat;
+  background-position: 252px center;
+  appearance: none;
+}
+.select:focus {
+  outline: none;
 }
 .select-label {
   font-size: 12px;
@@ -158,6 +200,26 @@ export default Vue.extend({
   color: #4f4f4f;
   display: flex;
   flex-direction: column;
-  max-width: min-content;
+  position: relative;
+  width: 288px;
+  margin-right: 24px;
+  font-family: "SF Pro Display", sans-serif;
+}
+.select-label__text {
+  margin-bottom: 6px;
+  padding-left: 19px;
+}
+
+@media screen and (max-width: 1570px) {
+  .header {
+    max-width: 1152px;
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 1184px) {
+  .header {
+    max-width: 768px;
+  }
 }
 </style>
